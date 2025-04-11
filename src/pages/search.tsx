@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import SearchBar from '@/components/SearchBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -10,15 +10,16 @@ import { searchGuides } from '@/services/guideService';
 import { Search as SearchIcon } from 'lucide-react';
 
 const Search = () => {
-  const router = useRouter();
-  const { q } = router.query;
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const q = searchParams.get('q') || '';
   const [results, setResults] = useState<GuideResult[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchResults = async () => {
       setLoading(true);
-      if (typeof q === 'string' && q.trim()) {
+      if (q.trim()) {
         try {
           const searchResults = await searchGuides(q);
           setResults(searchResults);
@@ -31,10 +32,8 @@ const Search = () => {
       setLoading(false);
     };
 
-    if (router.isReady) {
-      fetchResults();
-    }
-  }, [q, router.isReady]);
+    fetchResults();
+  }, [q]);
 
   const breadcrumbItems = [
     {
@@ -42,8 +41,8 @@ const Search = () => {
       href: '/search'
     },
     {
-      label: typeof q === 'string' ? q : '',
-      href: `/search?q=${encodeURIComponent(typeof q === 'string' ? q : '')}`
+      label: q,
+      href: `/search?q=${encodeURIComponent(q)}`
     }
   ];
 

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { Category } from '@/types/guide';
 import { ChevronRight } from 'lucide-react';
 
@@ -11,7 +11,7 @@ interface CategoryCardProps {
 const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      <Link href={`/category/${category.slug}`} className="block h-full">
+      <Link to={`/category/${category.slug}`} className="block h-full">
         <div className="p-6">
           <h3 className="text-xl font-semibold text-gray-900 mb-2">{category.name}</h3>
           <p className="text-gray-600 mb-4">{category.description}</p>
@@ -23,7 +23,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
                 {category.subcategories.slice(0, 2).map((subcategory) => (
                   <li key={subcategory.id}>
                     <Link 
-                      href={`/category/${category.slug}/${subcategory.slug}`}
+                      to={`/category/${category.slug}/${subcategory.slug}`}
                       className="text-sm text-guides-blue hover:underline flex items-center"
                     >
                       <ChevronRight className="h-3 w-3 mr-1" />

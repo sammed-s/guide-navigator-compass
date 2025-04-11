@@ -1,23 +1,24 @@
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import GuideContent from '@/components/GuideContent';
 import { GuideDetail } from '@/types/guide';
 import { getGuideBySlug } from '@/services/guideService';
 import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const GuideDetailPage = () => {
-  const router = useRouter();
-  const { slug } = router.query;
+  const { slug } = useParams();
   const [guide, setGuide] = useState<GuideDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGuide = async () => {
       setLoading(true);
-      if (typeof slug === 'string') {
+      if (slug) {
         try {
           const guideData = await getGuideBySlug(slug);
           if (guideData) {
@@ -28,7 +29,7 @@ const GuideDetailPage = () => {
               description: "The requested guide could not be found.",
               variant: "destructive"
             });
-            router.push('/');
+            navigate('/');
           }
         } catch (error) {
           console.error('Error fetching guide:', error);
@@ -42,10 +43,8 @@ const GuideDetailPage = () => {
       setLoading(false);
     };
 
-    if (router.isReady) {
-      fetchGuide();
-    }
-  }, [slug, router.isReady, router, toast]);
+    fetchGuide();
+  }, [slug, navigate, toast]);
 
   return (
     <div className="min-h-screen bg-gray-50">

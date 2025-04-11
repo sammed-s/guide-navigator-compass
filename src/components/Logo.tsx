@@ -1,10 +1,10 @@
 
 import React from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 const Logo: React.FC = () => {
   return (
-    <Link href="/" className="flex items-center">
+    <Link to="/" className="flex items-center">
       <svg 
         width="32" 
         height="32" 

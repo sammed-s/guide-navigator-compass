@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { Calendar, ChevronRight } from 'lucide-react';
 import { GuideResult } from '@/types/guide';
 import { formatDate } from '@/lib/utils';
@@ -13,19 +13,19 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-5 mb-4">
       <div className="mb-2 flex items-center text-sm text-gray-500">
-        <Link href={`/category/${result.category.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-guides-blue">
+        <Link to={`/category/${result.category.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-guides-blue">
           {result.category}
         </Link>
         <ChevronRight className="h-4 w-4 mx-1" />
         <Link 
-          href={`/category/${result.category.toLowerCase().replace(/\s+/g, '-')}/${result.subcategory.toLowerCase().replace(/\s+/g, '-')}`} 
+          to={`/category/${result.category.toLowerCase().replace(/\s+/g, '-')}/${result.subcategory.toLowerCase().replace(/\s+/g, '-')}`} 
           className="hover:text-guides-blue"
         >
           {result.subcategory}
         </Link>
       </div>
       
-      <Link href={`/guide/${result.slug}`}>
+      <Link to={`/guide/${result.slug}`}>
         <h3 className="text-lg font-semibold text-gray-900 hover:text-guides-blue mb-2">{result.title}</h3>
       </Link>
       

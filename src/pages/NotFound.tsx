@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Home } from 'lucide-react';
 
 const NotFound = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,7 +20,7 @@ const NotFound = () => {
             Sorry, we couldn&apos;t find the page you&apos;re looking for.
           </p>
           <Button 
-            onClick={() => router.push('/')} 
+            onClick={() => navigate('/')} 
             className="bg-guides-blue hover:bg-guides-darkBlue"
           >
             <Home className="mr-2 h-5 w-5" />

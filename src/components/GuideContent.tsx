@@ -4,7 +4,7 @@ import { GuideDetail } from '@/types/guide';
 import Breadcrumbs from './Breadcrumbs';
 import { Calendar } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 interface GuideContentProps {
   guide: GuideDetail;
@@ -58,7 +58,7 @@ const GuideContent: React.FC<GuideContentProps> = ({ guide }) => {
               <ul className="space-y-4">
                 {guide.relatedArticles.map((article) => (
                   <li key={article.id} className="border-b border-gray-200 pb-3 last:border-0 last:pb-0">
-                    <Link href={`/guide/${article.slug}`} className="hover:text-guides-blue font-medium">
+                    <Link to={`/guide/${article.slug}`} className="hover:text-guides-blue font-medium">
                       {article.title}
                     </Link>
                     <p className="text-sm text-gray-600 mt-1">{article.description.substring(0, 80)}...</p>

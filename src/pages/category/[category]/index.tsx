@@ -1,25 +1,25 @@
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import SearchBar from '@/components/SearchBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import SearchResultItem from '@/components/SearchResultItem';
 import { Category, GuideResult } from '@/types/guide';
 import { getCategories, getGuidesByCategory } from '@/services/guideService';
-import Link from 'next/link';
+import { useNavigate } from 'react-router-dom';
 
 const CategoryPage = () => {
-  const router = useRouter();
-  const { category } = router.query;
+  const { category } = useParams();
   const [guides, setGuides] = useState<GuideResult[]>([]);
   const [categoryData, setCategoryData] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      if (typeof category === 'string') {
+      if (category) {
         try {
           // Fetch category details
           const categories = await getCategories();
@@ -35,7 +35,7 @@ const CategoryPage = () => {
             setGuides(categoryGuides);
           } else {
             // Handle category not found
-            router.push('/');
+            navigate('/');
           }
         } catch (error) {
           console.error('Error fetching category data:', error);
@@ -44,10 +44,8 @@ const CategoryPage = () => {
       setLoading(false);
     };
 
-    if (router.isReady) {
-      fetchData();
-    }
-  }, [category, router.isReady, router]);
+    fetchData();
+  }, [category, navigate]);
 
   const breadcrumbItems = categoryData
     ? [
@@ -89,7 +87,7 @@ const CategoryPage = () => {
                       {categoryData.subcategories.map((subcategory) => (
                         <Link
                           key={subcategory.id}
-                          href={`/category/${categoryData.slug}/${subcategory.slug}`}
+                          to={`/category/${categoryData.slug}/${subcategory.slug}`}
                           className="bg-guides-gray rounded-md p-4 hover:bg-guides-blue/10 transition-colors"
                         >
                           <h3 className="font-medium text-gray-900">{subcategory.name}</h3>

@@ -1,18 +1,18 @@
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const SearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
     }
   };
 

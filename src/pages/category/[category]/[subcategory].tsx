@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import SearchBar from '@/components/SearchBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -9,17 +9,17 @@ import { Category, GuideResult, Subcategory } from '@/types/guide';
 import { getCategories, getGuidesByCategory } from '@/services/guideService';
 
 const SubcategoryPage = () => {
-  const router = useRouter();
-  const { category, subcategory } = router.query;
+  const { category, subcategory } = useParams();
   const [guides, setGuides] = useState<GuideResult[]>([]);
   const [categoryData, setCategoryData] = useState<Category | null>(null);
   const [subcategoryData, setSubcategoryData] = useState<Subcategory | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      if (typeof category === 'string' && typeof subcategory === 'string') {
+      if (category && subcategory) {
         try {
           // Fetch category and subcategory details
           const categories = await getCategories();
@@ -42,11 +42,11 @@ const SubcategoryPage = () => {
               setGuides(subcategoryGuides);
             } else {
               // Handle subcategory not found
-              router.push(`/category/${category}`);
+              navigate(`/category/${category}`);
             }
           } else {
             // Handle category not found
-            router.push('/');
+            navigate('/');
           }
         } catch (error) {
           console.error('Error fetching subcategory data:', error);
@@ -55,10 +55,8 @@ const SubcategoryPage = () => {
       setLoading(false);
     };
 
-    if (router.isReady) {
-      fetchData();
-    }
-  }, [category, subcategory, router.isReady, router]);
+    fetchData();
+  }, [category, subcategory, navigate]);
 
   const breadcrumbItems = categoryData && subcategoryData
     ? [
